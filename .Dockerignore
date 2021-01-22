@@ -1,0 +1,3 @@
+## Ignore the files below when copying files to container
+
+#/vendor/
