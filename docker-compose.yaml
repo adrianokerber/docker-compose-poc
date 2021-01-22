@@ -19,7 +19,7 @@ services:
     tty: true
     ports:
       - "8000:80"
-    volumes: :
+    volumes:
       - .:/var/www
     networks: 
       - app-network
@@ -32,6 +32,8 @@ services:
     tty: true
     ports:
       - "33006:3306"
+    volumes:
+      - ./.docker/dbdata:/var/lib/mysql
     environment:
       - MYSQL_DATABASE=laravel
       - MYSQL_ROOT_PASSWORD=root
@@ -39,7 +41,7 @@ services:
     networks:
       - app-network
     healthcheck:
-      test: ["CMD-SHELL", 'mysql -uroot --database=laravel --password=roo --execute="SELECT count(table_name) > 0 FROM information_schema.tables;" --skip-column-names -B']
+      test: ["CMD-SHELL", 'mysql -uroot --database=laravel --password=root --execute="SELECT count(table_name) > 0 FROM information_schema.tables;" --skip-column-names -B']
       interval: 10s
       timeout: 10s
       retries: 4
