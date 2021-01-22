@@ -24,7 +24,7 @@ Initialize and build all containers
 docker-compose up -d --build
 ```
 
-## Docker commands example guide
+## Docker command tips
 
 Build Docker image locally
 ```bash
@@ -39,6 +39,25 @@ docker run -d --name laravel -p 8000:8000 adrianokerber/laravel
 Remove all Docker containers
 ```bash
 docker rm $(docker ps -aq) -f
+```
+
+Interact with container using Bash (Note: <container_name> is the name of your target container)
+```
+docker exec -it <container_name> bash
+```
+Other useful commands:
+```
+# List running containers
+docker ps
+
+# List images
+docker images
+
+# Remove container
+docker rm <container_id>
+
+# Remove image
+docker rmi <image_id>
 ```
 
 > The final generated Docker image can be found on Docker Hub by clicking [here!](https://hub.docker.com/repository/docker/adrianokerber/laravel)

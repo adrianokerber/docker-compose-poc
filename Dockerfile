@@ -13,15 +13,16 @@ RUN rm -rf /var/www/html
 
 # Copy files to container folder (Note: we could have used "COPY . ." since we defined the WORKDIR pointing to the same path)
 COPY . /var/www
+
+# Change files owner to new user
 RUN chown -R www-data:www-data /var/www
 
 # Create symbolic link to html called "public"
 RUN ln -s public html
 
+# Set user
 RUN usermod -u 1000 www-data
 USER www-data
-
-# Install dependencies, copy .env, and configure artisan
 
 # Expose container port
 EXPOSE 9000
