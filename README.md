@@ -61,3 +61,5 @@ docker rmi <image_id>
 ```
 
 > The final generated Docker image can be found on Docker Hub by clicking [here!](https://hub.docker.com/repository/docker/adrianokerber/laravel)
+
+> This project uses [Gitmoji](https://gitmoji.dev/) as commits' pattern along with a clear message
