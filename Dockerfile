@@ -22,12 +22,6 @@ RUN usermod -u 1000 www-data
 USER www-data
 
 # Install dependencies, copy .env, and configure artisan
-RUN composer install && \
-    cp .env.example .env && \
-    php artisan key:generate && \
-    php artisan config:cache
 
 # Expose container port
 EXPOSE 9000
-# Set entrypoint to routine that will hold container running
-ENTRYPOINT [ "php-fpm" ]
