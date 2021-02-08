@@ -8,6 +8,7 @@ services:
       - .:/var/www
     networks: 
       - app-network
+    entrypoint: .docker/entrypoint.sh
     depends_on:
       db:
         condition: service_healthy
@@ -23,6 +24,8 @@ services:
       - .:/var/www
     networks: 
       - app-network
+    depends_on:
+      - app
   
   db:
     image: mysql:5.7
