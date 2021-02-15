@@ -1,0 +1,49 @@
+FROM php:7.3.6-fpm-alpine3.9 as build
+
+# Dependencies
+RUN apk add --no-cache openssl bash mysql-client
+RUN docker-php-ext-install pdo pdo_mysql
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Dockerize that we will use for healthcheck of database container before starting the app container
+ENV DOCKERIZE_VERSION v0.6.1
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+
+# Dependency to enable usermod changes
+RUN apk add --no-cache shadow
+
+WORKDIR /var/www
+# Remove default folder
+RUN rm -rf /var/www/html
+# Create symbolic link to html called "public"
+RUN ln -s public html
+COPY . /var/www
+
+# Set environment variables to be used by dockerize on -template command. Warn: we should set env properties outside image so the image can be used by any environment (PROD, HOMOL, DEV)
+ENV DB_HOST=db
+ENV DB_DATABASE=laravel
+ENV DB_USERNAME=root
+ENV DB_PASSWORD=root
+
+RUN dockerize -template .docker/app/.env.tmpl:.env
+
+RUN composer install \
+    && php artisan key:generate \
+    && php artisan cache:clear \
+    && chmod -R 775 storage
+
+FROM php:7.3.6-fpm-alpine3.9 as final
+
+RUN apk add --no-cache mysql-client
+RUN docker-php-ext-install pdo pdo_mysql
+
+WORKDIR /var/www
+RUN rm -rf /var/www/html
+
+COPY --from=build /var/www .
+
+# Expose container port
+EXPOSE 9000
+ENTRYPOINT [ "php-fpm" ]
