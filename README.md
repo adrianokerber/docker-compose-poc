@@ -60,6 +60,6 @@ docker rm <container_id>
 docker rmi <image_id>
 ```
 
-> The final generated Docker image can be found on Docker Hub by clicking [here!](https://hub.docker.com/repository/docker/adrianokerber/laravel)
+> The generated Docker image with optimizations can be found on Docker Hub by clicking [here!](https://hub.docker.com/repository/docker/adrianokerber/laravel-optimized). Note: this image uses the Dockerfile.prod aiming the production build although we are currently setting the ENV variables direclty on the dockerfile instead of external configurations.
 
 > This project uses [Gitmoji](https://gitmoji.dev/) as commits' pattern along with a clear message
